@@ -16,6 +16,6 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         log.debug("redirect to userList");
         response.sendRedirect("users.jsp");
-        //    request.getRequestDispatcher("/users.jsp").forward(request, response);
+        //   request.getRequestDispatcher("/users.jsp").forward(request, response);
     }
 }
