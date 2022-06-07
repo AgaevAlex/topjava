@@ -9,11 +9,11 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.*;
 
-public class UserMealsUtil {
+public class MealsUtil {
     public final static int caloriesPerDay = 2000;
 
     public static void main(String[] args) {
-        createMeals();
+//        createMeals();
 
 //        System.out.println(filteredByStreams(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), 2000));
     }
@@ -30,7 +30,7 @@ public class UserMealsUtil {
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
 
-        return filteredByCycles(meals, LocalTime.of(7, 0), LocalTime.of(12, 0), caloriesPerDay);
+        return filteredByCycles(meals, LocalTime.of(0, 0), LocalTime.of(23, 59), caloriesPerDay);
     }
 
     public static List<MealTo> filteredByCycles(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
@@ -40,7 +40,7 @@ public class UserMealsUtil {
             LocalDate ld = meal.getDateTime().toLocalDate();
             calPerDay.merge(ld, meal.getCalories(), Integer::sum);
             if (TimeUtil.isBetweenHalfOpen(meal.getDateTime().toLocalTime(), startTime, endTime)) {
-                mealsWithExcess.add(new MealTo(meal.getDateTime(), meal.getDescription(), meal.getCalories(), false));
+                mealsWithExcess.add(new MealTo(meal.getUuid(), meal.getDateTime(), meal.getDescription(), meal.getCalories(), false));
             }
         }
         for (MealTo meal : mealsWithExcess) {

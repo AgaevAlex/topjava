@@ -29,8 +29,6 @@
         </td>
         <td>${meal.description}</td>
         <td>${meal.calories}</td>
-        <td></td>
-        <td></td>
     </tr>
     </c:forEach>
     </tr>

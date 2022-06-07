@@ -3,27 +3,27 @@ package ru.javawebinar.topjava.model;
 import java.time.LocalDateTime;
 
 public class MealTo {
+    private static int counter;
     private final LocalDateTime dateTime;
-
     private final String description;
-
     private final int calories;
-
+    private final Integer uuid;
     private boolean excess;
 
-    public MealTo(LocalDateTime dateTime, String description, int calories, boolean excess) {
+    public MealTo(Integer uuid, LocalDateTime dateTime, String description, int calories, boolean excess) {
+        this.uuid = uuid;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
         this.excess = excess;
     }
 
-    public void setExcess(boolean excess) {
-        this.excess = excess;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public Integer getUuid() {
+        return uuid;
     }
 
     public int getCalories() {
@@ -32,6 +32,10 @@ public class MealTo {
 
     public boolean isExcess() {
         return excess;
+    }
+
+    public void setExcess(boolean excess) {
+        this.excess = excess;
     }
 
     public LocalDateTime getDateTime() {
@@ -46,5 +50,11 @@ public class MealTo {
                 ", calories=" + calories +
                 ", excess=" + excess +
                 '}';
+    }
+
+    private int inc() {
+        synchronized (this) {
+            return counter++;
+        }
     }
 }
