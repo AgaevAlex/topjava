@@ -3,6 +3,7 @@
 //import ru.javawebinar.topjava.model.UserMeal;
 //import ru.javawebinar.topjava.model.UserMealWithExcess;
 //
+//import java.time.LocalDate;
 //import java.time.LocalTime;
 //import java.util.*;
 //import java.util.function.BiConsumer;
@@ -12,7 +13,7 @@
 //import java.util.stream.Collector;
 //import java.util.stream.Collectors;
 //
-//public class MealsCollector implements Collector<UserMeal, Map<UserMeal, Integer>, List<UserMealWithExcess>> {
+//public class MealsCollector implements Collector<UserMeal, Map<LocalDate, Integer>, List<UserMealWithExcess>> {
 //    private final int caloriesPerDay;
 //    private final LocalTime startTime;
 //    private final LocalTime endTime;
@@ -26,13 +27,13 @@
 //
 //
 //    @Override
-//    public Supplier<Map<UserMeal, Integer>> supplier() {
+//    public Supplier<Map<LocalDate, Integer>> supplier() {
 //
 //        return HashMap::new;
 //    }
 //
 //    @Override
-//    public BiConsumer<Map<UserMeal, Integer>, UserMeal> accumulator() {
+//    public BiConsumer<Map<LocalDate, Integer>, UserMeal> accumulator() {
 //        return (o1, o2) -> {
 //            meals.add(new UserMealWithExcess(o2.getDateTime(), o2.getDescription(), o2.getCalories(), false));
 //            o1.merge(o2.getDateTime().toLocalDate(), o2.getCalories(), Integer::sum);
@@ -41,7 +42,7 @@
 //    }
 //
 //    @Override
-//    public BinaryOperator<Map<UserMeal, Integer>> combiner() {
+//    public BinaryOperator<Map<LocalDate, Integer>> combiner() {
 //        return (l, r) -> {
 //            l.putAll(r);
 //            return l;
@@ -49,7 +50,7 @@
 //    }
 //
 //    @Override
-//    public Function<Map<UserMeal, Integer>, List<UserMealWithExcess>> finisher() {
+//    public Function<Map<LocalDate, Integer>, List<UserMealWithExcess>> finisher() {
 //
 //
 //        return (l) -> meals.stream()
