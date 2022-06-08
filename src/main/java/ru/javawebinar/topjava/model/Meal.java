@@ -1,5 +1,7 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.util.idGenerator;
+
 import java.time.LocalDateTime;
 
 public class Meal {
@@ -9,21 +11,28 @@ public class Meal {
     private final String description;
 
     private final int calories;
-    private Integer uuid;
+    private Integer id;
 
-    public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.uuid = inc();
+    public Meal(int id, LocalDateTime dateTime, String description, int calories) {
+        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
     }
 
-    public Integer getUuid() {
-        return uuid;
+    public Meal(LocalDateTime dateTime, String description, int calories) {
+        this.id = idGenerator.inc();
+        this.dateTime = dateTime;
+        this.description = description;
+        this.calories = calories;
     }
 
-    public void setUuid(Integer uuid) {
-        this.uuid = uuid;
+    public Integer getid() {
+        return id;
+    }
+
+    public void setid(Integer id) {
+        this.id = id;
     }
 
     public LocalDateTime getDateTime() {

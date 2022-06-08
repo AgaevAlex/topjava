@@ -18,20 +18,17 @@
         <th></th>
         <th></th>
     </tr>
-    <tr>
-        <c:forEach items="${list}" var="meal">
-    <tr>
-    <tr style="background-color:${meal.excess ? 'greenyellow' : 'red'}">
-        <td>
-            <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
-                           type="both"/>
-            <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
-        </td>
-        <td>${meal.description}</td>
-        <td>${meal.calories}</td>
-    </tr>
+    <c:forEach items="${list}" var="meal">
+        <tr style="background-color:${meal.excess ? 'greenyellow' : 'red'}">
+            <td>
+                <fmt:parseDate value="${ meal.dateTime }" pattern="yyyy-MM-dd'T'HH:mm" var="parsedDateTime"
+                               type="both"/>
+                <fmt:formatDate pattern="dd.MM.yyyy HH:mm" value="${ parsedDateTime }"/>
+            </td>
+            <td>${meal.description}</td>
+            <td>${meal.calories}</td>
+        </tr>
     </c:forEach>
-    </tr>
 </table>
 </body>
 </html>

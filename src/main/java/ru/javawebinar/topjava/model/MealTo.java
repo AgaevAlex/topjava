@@ -7,11 +7,11 @@ public class MealTo {
     private final LocalDateTime dateTime;
     private final String description;
     private final int calories;
-    private final Integer uuid;
+    private final Integer id;
     private boolean excess;
 
-    public MealTo(Integer uuid, LocalDateTime dateTime, String description, int calories, boolean excess) {
-        this.uuid = uuid;
+    public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
+        this.id = id;
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -22,8 +22,8 @@ public class MealTo {
         return description;
     }
 
-    public Integer getUuid() {
-        return uuid;
+    public Integer getid() {
+        return id;
     }
 
     public int getCalories() {
@@ -52,9 +52,4 @@ public class MealTo {
                 '}';
     }
 
-    private int inc() {
-        synchronized (this) {
-            return counter++;
-        }
-    }
 }

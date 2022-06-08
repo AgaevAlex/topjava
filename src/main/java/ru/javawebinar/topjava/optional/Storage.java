@@ -1,18 +1,15 @@
 package ru.javawebinar.topjava.optional;
 
-import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
-
 import java.util.List;
 
-public interface Storage {
-    void create(Meal meal);
+public interface Storage<T> {
+    void create(T t);
 
-    Meal read(Integer uuid);
+    T read(int id);
 
-    void update(Meal meal);
+    void update(T t);
 
-    void delete(Integer uuid);
+    void delete(int id);
 
-    List<MealTo> getListMeals();
+    List<T> getList();
 }

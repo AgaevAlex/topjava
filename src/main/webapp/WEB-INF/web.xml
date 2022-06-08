@@ -16,22 +16,11 @@
         <url-pattern>/users</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>mealServlet</servlet-name>
+        <servlet-name>MealServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.MealServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
     </servlet>
-
     <servlet-mapping>
-        <servlet-name>mealServlet</servlet-name>
+        <servlet-name>MealServlet</servlet-name>
         <url-pattern>/meals</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>MealOptionalServlet</servlet-name>
-        <servlet-class>ru.javawebinar.topjava.web.MealOptionalServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>MealOptionalServlet</servlet-name>
-        <url-pattern>/MealOptionalServlet</url-pattern>
     </servlet-mapping>
 </web-app>
