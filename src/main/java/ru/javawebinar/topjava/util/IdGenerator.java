@@ -2,7 +2,7 @@ package ru.javawebinar.topjava.util;
 
 import java.util.concurrent.locks.ReentrantLock;
 
-public class idGenerator {
+public class IdGenerator {
     static int counter = 0; // a global counter
     static ReentrantLock counterLock = new ReentrantLock(true);
 

@@ -14,6 +14,7 @@
 <body>
 ${head}
 <form method="POST" action='meals' name="frmAddMeal">
+     <input type="hidden" name = "id" value="${meal.id}">
     Description : <input
         type="text" name="description"
         value="<c:out value="${meal.description}" />"/> <br/>

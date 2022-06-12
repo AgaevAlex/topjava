@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.optional.CollectionStorage;
 import ru.javawebinar.topjava.optional.Storage;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,8 +16,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static ru.javawebinar.topjava.util.MealsUtil.caloriesPerDay;
+
 public class MealServlet extends HttpServlet {
-    private static final Logger log = LoggerFactory.getLogger(UserServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
     private static String INSERT_OR_EDIT = "/addEditMeals.jsp";
     private static String LIST_MEALS = "/listMeals.jsp";
@@ -56,7 +59,7 @@ public class MealServlet extends HttpServlet {
             default:
                 forward = LIST_MEALS;
                 log.info("Forward to listMeals page");
-                request.setAttribute("list", storage.getList());
+                request.setAttribute("list", MealsUtil.filteredByStreamsList(storage.getList(), caloriesPerDay, (m) -> true));
         }
         RequestDispatcher view = request.getRequestDispatcher(forward);
         view.forward(request, response);
@@ -68,7 +71,7 @@ public class MealServlet extends HttpServlet {
         LocalDateTime dateTime = LocalDateTime.parse(request.getParameter("dateTime"), formatter);
 
         Meal meal = new Meal(dateTime, request.getParameter("description"), Integer.parseInt(request.getParameter("calories")));
-        String mealid = request.getParameter("userid");
+        String mealid = request.getParameter("id");
         if (mealid == null || mealid.isEmpty()) {
             storage.create(meal);
             log.info("Created new meal " + meal);

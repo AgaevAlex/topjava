@@ -1,11 +1,10 @@
 package ru.javawebinar.topjava.model;
 
-import ru.javawebinar.topjava.util.idGenerator;
+import ru.javawebinar.topjava.util.IdGenerator;
 
 import java.time.LocalDateTime;
 
 public class Meal {
-    private static int counter;
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -21,7 +20,7 @@ public class Meal {
     }
 
     public Meal(LocalDateTime dateTime, String description, int calories) {
-        this.id = idGenerator.inc();
+        this.id = IdGenerator.inc();
         this.dateTime = dateTime;
         this.description = description;
         this.calories = calories;
@@ -47,9 +46,4 @@ public class Meal {
         return calories;
     }
 
-    private int inc() {
-        synchronized (this) {
-            return counter++;
-        }
-    }
 }

@@ -17,13 +17,13 @@ public class MealsUtil {
 
     public static List<Meal> createMealsList() {
         List<Meal> meals = Arrays.asList(
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
-                new Meal(idGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
+                new Meal(IdGenerator.inc(), LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
         );
         return meals;
     }
