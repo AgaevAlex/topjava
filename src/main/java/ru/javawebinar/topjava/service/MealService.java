@@ -44,4 +44,8 @@ public class MealService {
     public Meal create(Meal meal, int userId) {
         return repository.save(meal, userId);
     }
+
+//    public Integer getUserIdByMeal (int id){
+//        return repository.get
+//    }
 }
