@@ -18,8 +18,6 @@ public class MealTestData {
     public static final Meal userMeal6 = new Meal(START_SEQ + 10, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
     public static final Meal userMeal7 = new Meal(START_SEQ + 11, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
     public static final Meal adminMeal1 = new Meal(START_SEQ + 6, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
-    public static final Meal userMealDuplicateTime = new Meal(START_SEQ + 12, userMeal1.getDateTime(), "Обед", 1000);
-
     public static Meal getNew() {
         return new Meal(LocalDateTime.of(2020, Month.JANUARY, 10, 10, 0), "Завтрак", 333);
     }
