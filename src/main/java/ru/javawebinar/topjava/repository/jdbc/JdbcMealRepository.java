@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,7 +46,7 @@ public class JdbcMealRepository implements MealRepository {
         } else if (namedParameterJdbcTemplate.update(
                 "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories  " +
                         "WHERE id=:id AND user_id=:userId", map) == 0) {
-            return null;
+           return null;
         }
         return meal;
     }
@@ -68,7 +69,7 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? AND date_time between ? and ? ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
-
+        return jdbcTemplate.query("SELECT * FROM meals WHERE user_id=? " +
+                "AND date_time >= ? and date_time < ? ORDER BY date_time DESC", ROW_MAPPER, userId, startDateTime, endDateTime);
     }
 }

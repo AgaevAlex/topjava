@@ -1,34 +1,29 @@
 package ru.javawebinar.topjava;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
-    public static final Meal userMeal1 = new Meal(START_SEQ+5, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
-    public static final Meal adminMeal2 = new Meal(START_SEQ+6, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
-    public static final Meal userMeal3 = new Meal(START_SEQ+7, LocalDateTime.of(2021, Month.JANUARY, 30, 15, 0), "Обед", 500);
-    public static final Meal userMeal4 = new Meal(START_SEQ+8, LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100);
-    public static final Meal userMeal5 = new Meal(START_SEQ+9, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000);
-
-    public static final Meal userMeal6 = new Meal(START_SEQ+10, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
-
-    public static final Meal userMeal7 = new Meal(START_SEQ+11, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
-
-    public static final Meal adminMeal8DublicateTime = new Meal(START_SEQ+12, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
+    public static final Meal userMeal1 = new Meal(START_SEQ + 5, LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500);
+    public static final Meal userMeal3 = new Meal(START_SEQ + 7, LocalDateTime.of(2021, Month.JANUARY, 30, 15, 0), "Обед", 500);
+    public static final Meal userMeal4 = new Meal(START_SEQ + 8, LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100);
+    public static final Meal userMeal5 = new Meal(START_SEQ + 9, LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000);
+    public static final Meal userMeal6 = new Meal(START_SEQ + 10, LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500);
+    public static final Meal userMeal7 = new Meal(START_SEQ + 11, LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410);
+    public static final Meal adminMeal1 = new Meal(START_SEQ + 6, LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000);
+    public static final Meal userMealDuplicateTime = new Meal(START_SEQ + 12, userMeal1.getDateTime(), "Обед", 1000);
 
     public static Meal getNew() {
         return new Meal(LocalDateTime.of(2020, Month.JANUARY, 10, 10, 0), "Завтрак", 333);
     }
+
     public static Meal getUpdated() {
         Meal updated = new Meal(userMeal1);
         updated.setDescription("update");
@@ -36,6 +31,7 @@ public class MealTestData {
         updated.setDateTime(LocalDateTime.of(2022, Month.JANUARY, 30, 10, 0));
         return updated;
     }
+
     public static void assertMatch(Meal actual, Meal expected) {
         assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
     }
