@@ -6,11 +6,11 @@ import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import ru.javawebinar.topjava.MealTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
@@ -18,17 +18,18 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
 
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
+import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
 import static ru.javawebinar.topjava.UserTestData.USER_ID;
-
+import static org.assertj.core.api.Assertions.assertThat;
 @ContextConfiguration({
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class MealServiceTest {
 
     static {
@@ -60,38 +61,41 @@ public class MealServiceTest {
     @Test
     public void getBetweenInclusiveLimitValue() {
         List<Meal> meals = service.getBetweenInclusive(LocalDate.of(2020, Month.JANUARY, 30), LocalDate.of(2020, Month.JANUARY, 30), USER_ID);
-        assertMatch(meals, userMeal4, userMeal1);
+        assertMatch(meals, userMeal1);
     }
 
     @Test
-    public void zgetAll() {
+    public void getAll() {
         List<Meal> all = service.getAll(USER_ID);
         assertMatch(all, userMeal3, userMeal7, userMeal6, userMeal5, userMeal4, userMeal1);
     }
 
     @Test
     public void update() {
-        Meal updated = userMeal1;
+        Meal updated = MealTestData.getUpdated();
         updated.setCalories(userMeal1.getCalories() - 100);
         service.update(updated, USER_ID);
         assertMatch(service.get(userMeal1.getId(), USER_ID), updated);
-        updated.setCalories(userMeal1.getCalories() + 100);
     }
 
     @Test
     public void create() {
         Meal creater = service.create(getNew(), USER_ID);
         Integer newId = creater.getId();
-        //   Integer userId = service.getUserIdByMeal(newId);
         Meal newMeal = getNew();
         newMeal.setId(newId);
         assertMatch(creater, newMeal);
-        //  assertThat(userId).isEqualTo(UserTestData.USER_ID);
     }
 
     @Test
     public void updateSomeoneElse() {
         assertThrows(NotFoundException.class, () -> service.update(adminMeal2, USER_ID));
+    }
+
+    @Test
+    public void dublicateDateTime() {
+        assertThat(service.create(adminMeal8DublicateTime, ADMIN_ID)).isEqualTo(null);
+
     }
 
     @Test
