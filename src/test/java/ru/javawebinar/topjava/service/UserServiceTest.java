@@ -42,7 +42,6 @@ public class UserServiceTest {
         Integer newId = created.getId();
         User newUser = getNew();
         newUser.setId(newId);
-        assertMatch(created, newUser);
         assertMatch(service.get(newId), newUser);
     }
 
