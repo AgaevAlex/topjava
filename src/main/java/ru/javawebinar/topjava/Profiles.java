@@ -24,4 +24,8 @@ public class Profiles {
             throw new IllegalStateException("Could not find DB driver");
         }
     }
+//временное решение без логики
+    public static String getActiveRepoProfile() {
+        return REPOSITORY_IMPLEMENTATION;
+    }
 }
