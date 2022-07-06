@@ -1,8 +1,8 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.MealRepository;
 
 import javax.persistence.EntityManager;
@@ -14,6 +14,8 @@ import java.util.List;
 public class DataJpaMealRepository implements MealRepository {
 
     private final CrudMealRepository crudRepository;
+    @Autowired
+    private CrudUserRepository crudUserRepository;
     @PersistenceContext
     private EntityManager em;
 
@@ -21,13 +23,9 @@ public class DataJpaMealRepository implements MealRepository {
         this.crudRepository = crudRepository;
     }
 
-    /*   Не знаю можно ли использовать em для setUser,
-    как вариант реализации через spring добавить поле CrudUserRepository crudUserRepository
-    и вызвать метод crudUserRepository.getOne, но тогда нужно добавить crudUserRepository в конструктор
-   */
     @Override
     public Meal save(Meal meal, int userId) {
-        meal.setUser(em.getReference(User.class, userId));
+        meal.setUser(crudUserRepository.getReferenceById(userId));
         if (meal.getId() != null && get(meal.getId(), userId) == null) {
             return null;
         }
@@ -53,5 +51,10 @@ public class DataJpaMealRepository implements MealRepository {
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
         return crudRepository.getBetweenHalfOpen(userId, startDateTime, endDateTime);
+    }
+
+    @Override
+    public Meal getMealWithUsers(int id, int userId) {
+        return crudRepository.getMealBy(id, userId);
     }
 }
