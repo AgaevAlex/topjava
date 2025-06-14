@@ -19,10 +19,7 @@ public class UserMealWithExcess {
     }
 
     public UserMealWithExcess(UserMeal meal, boolean excess) {
-        this.dateTime = meal.getDateTime();
-        this.description = meal.getDescription();
-        this.calories = meal.getCalories();
-        this.excess = excess;
+      this(meal.getDateTime(), meal.getDescription(),meal.getCalories(), excess);
     }
 
     @Override
