@@ -21,17 +21,17 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
 
     @Override
     public Meal save(Meal meal) {
-        return meals.putIfAbsent(idCounter.getAndIncrement(), meal);
-    }
-
-    @Override
-    public void update(int id, Meal meal) {
-        System.out.println("wqec");
+        if (meal.getId() == null) {
+            meal.setId(idCounter.getAndIncrement());
+           return meals.put(meal.getId(), meal);
+        } else {
+         return meals.computeIfPresent(meal.getId(),(key,value)-> meal);
+        }
     }
 
     @Override
     public void delete(int id) {
-
+        meals.remove(id);
     }
 
     public Map<Integer, Meal> getMeals() {

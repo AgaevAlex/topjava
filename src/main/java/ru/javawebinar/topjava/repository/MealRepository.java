@@ -9,8 +9,6 @@ import java.util.List;
 public interface MealRepository {
     Meal save(Meal meal);
 
-    void update(int id, Meal meal);
-
     void delete(int id);
 
     Meal getMealById(int id);

@@ -30,6 +30,23 @@
         </tr>
     </c:forEach>
 </table>
-<p><a href="meals?action=insert">Add Meal</a></p>
+
+<form method="POST" action='meals' name="frmAddUser">
+    User ID : <input type="text" readonly="readonly" name="meal"
+                     value="<c:out value="${meal.id}" />" /> <br />
+    First Name : <input
+        type="text" name="firstName"
+        value="<c:out value="${user.firstName}" />" /> <br />
+    Last Name : <input
+        type="text" name="lastName"
+        value="<c:out value="${user.lastName}" />" /> <br />
+    DOB : <input
+        type="text" name="dob"
+        value="<fmt:formatDate pattern="MM/dd/yyyy" value="${user.dob}" />" /> <br />
+    Email : <input type="text" name="email"
+                   value="<c:out value="${user.email}" />" /> <br /> <input
+        type="submit" value="Submit" />
+</form>
+
 </body>
 </html>
