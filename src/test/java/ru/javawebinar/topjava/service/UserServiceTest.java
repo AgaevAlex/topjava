@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.bridge.SLF4JBridgeHandler;
@@ -28,9 +29,9 @@ import static ru.javawebinar.topjava.UserTestData.*;
 @ActiveProfiles("jdbc")
 public class UserServiceTest {
 
-    static {
-        // Only for postgres driver logging
-        // It uses java.util.logging and logged via jul-to-slf4j bridge
+    @BeforeClass
+    public static void setUp() {
+        SLF4JBridgeHandler.removeHandlersForRootLogger();
         SLF4JBridgeHandler.install();
     }
 
