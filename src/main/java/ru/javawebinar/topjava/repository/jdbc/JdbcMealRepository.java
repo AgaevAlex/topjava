@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-@Profile("jdbc")
 public class JdbcMealRepository implements MealRepository {
 
     private static final BeanPropertyRowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);

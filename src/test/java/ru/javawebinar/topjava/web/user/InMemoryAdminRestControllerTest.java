@@ -24,7 +24,7 @@ public class InMemoryAdminRestControllerTest {
     public static void beforeClass() {
         appCtx = new GenericApplicationContext();
         appCtx.getEnvironment().setActiveProfiles("inMemory");
-        new XmlBeanDefinitionReader(appCtx).loadBeanDefinitions("classpath:spring/spring-app.xml");
+        new XmlBeanDefinitionReader(appCtx).loadBeanDefinitions("classpath:spring/spring-profiles.xml");
         appCtx.refresh();
         log.info("\n{}\n", Arrays.toString(appCtx.getBeanDefinitionNames()));
         controller = appCtx.getBean(AdminRestController.class);
