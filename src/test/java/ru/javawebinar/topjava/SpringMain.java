@@ -19,7 +19,8 @@ public class SpringMain {
         // java 7 automatic resource management (ARM)
         try (GenericApplicationContext appCtx = new GenericApplicationContext()) {
             appCtx.getEnvironment().setActiveProfiles("inMemory");
-            new XmlBeanDefinitionReader(appCtx).loadBeanDefinitions("classpath:spring/spring-app.xml");
+            new XmlBeanDefinitionReader(appCtx).loadBeanDefinitions("classpath:spring/spring-app.xml",
+                    "classpath:spring/spring-test.xml");
             appCtx.refresh();
             System.out.println("Bean definition names: " + Arrays.toString(appCtx.getBeanDefinitionNames()));
             AdminRestController adminUserController = appCtx.getBean(AdminRestController.class);
