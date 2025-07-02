@@ -22,21 +22,27 @@ public class JpaMealRepository implements MealRepository {
     @Transactional
     @Override
     public Meal save(Meal meal, int userId) {
-        if (meal.isNew()) {
-            User ref = em.getReference(User.class, userId);
-            meal.setUser(ref);
+        boolean isNewMeal = meal.isNew();
+        if (!isNewMeal && get(meal.getId(), userId) == null) {
+            return null;
+        }
+        meal.setUser(em.getReference(User.class, userId));
+        if (isNewMeal) {
             em.persist(meal);
             return meal;
         } else {
-            User ref = em.getReference(User.class, userId);
-            return em.createNamedQuery(Meal.UPDATE)
-                    .setParameter("id", meal.id())
-                    .setParameter("description", meal.getDescription())
-                    .setParameter("dateTime", meal.getDateTime())
-                    .setParameter("calories", meal.getCalories())
-                    .setParameter("user", ref)
-                    .executeUpdate() == 0 ? null : meal;
+            return em.merge(meal);
         }
+// не валидируются проверки Entity, поэтому придется добавлять еще один запрос ?
+//            return em.createQuery("UPDATE Meal " +
+//                            "SET dateTime=:dateTime , description=:description, calories=:calories" +
+//                            " WHERE id=:id AND user.id=:userId")
+//                    .setParameter("dateTime", meal.getDateTime())
+//                    .setParameter("description", meal.getDescription())
+//                    .setParameter("calories", meal.getCalories())
+//                    .setParameter("id", meal.getId())
+//                    .setParameter("userId", userId)
+//                    .executeUpdate() == 0 ? null : meal;
     }
 
     @Transactional

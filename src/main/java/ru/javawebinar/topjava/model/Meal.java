@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.model;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
@@ -21,7 +22,8 @@ import java.time.LocalTime;
                 "WHERE m.user.id =:userId AND m.dateTime >= :startDate AND m.dateTime < :endDate ORDER BY dateTime DESC"),
 })
 @Entity
-@Table(name = "meal")
+@Table(name = "meal", uniqueConstraints =
+@UniqueConstraint(columnNames = {"user_id", "date_time"}, name = "meal_unique_user_datetime_idx"))
 public class Meal extends AbstractBaseEntity {
 
     public static final String DELETE = "Meal.delete";
@@ -34,7 +36,7 @@ public class Meal extends AbstractBaseEntity {
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotNull
+    @NotBlank
     @Size(max = 128)
     private String description;
 
@@ -44,6 +46,8 @@ public class Meal extends AbstractBaseEntity {
     private int calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     public Meal() {
