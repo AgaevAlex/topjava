@@ -20,7 +20,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -37,7 +37,7 @@ public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
-    private static ArrayList<String> note = new ArrayList();
+    private static final StringBuilder note = new StringBuilder();
 
     @Rule
     public final TestRule watchman = new TestWatcher() {
@@ -52,10 +52,11 @@ public class MealServiceTest {
 
         @Override
         protected void finished(Description description) {
-            long endTime = System.nanoTime();
-            long duration = (endTime - startTime) / 1_000_000;
-            String method = String.format("%-35s", description.getMethodName());
-            note.add("\n"+ method + duration + " ms");
+            long duration = System.nanoTime() - startTime;
+
+            String result = String.format("%-35s %7d ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(duration));
+            note.append("\n").append(result);
+            log.info("{}", result);
         }
     };
 
