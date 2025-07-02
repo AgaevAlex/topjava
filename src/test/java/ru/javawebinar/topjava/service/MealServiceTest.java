@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.service;
 
+import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestRule;
@@ -19,6 +20,7 @@ import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertThrows;
 import static ru.javawebinar.topjava.MealTestData.*;
@@ -35,6 +37,8 @@ public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
 
+    private static ArrayList<String> note = new ArrayList();
+
     @Rule
     public final TestRule watchman = new TestWatcher() {
 
@@ -42,17 +46,23 @@ public class MealServiceTest {
 
         @Override
         protected void starting(Description description) {
-            startTime = System.currentTimeMillis();
+            startTime = System.nanoTime();
             log.info("Starting test: {}", description.getMethodName());
         }
 
         @Override
         protected void finished(Description description) {
-            long endTime = System.currentTimeMillis();
-            long duration = endTime - startTime;
-            log.info("Finished test: {} (duration: {} ms)", description.getMethodName(), duration);
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime) / 1_000_000;
+            String method = String.format("%-35s", description.getMethodName());
+            note.add("\n"+ method + duration + " ms");
         }
     };
+
+    @AfterClass
+    public static void printNote() {
+        log.info(String.valueOf(note));
+    }
 
     @Autowired
     private MealService service;

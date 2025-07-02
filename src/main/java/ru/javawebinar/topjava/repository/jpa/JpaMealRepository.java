@@ -33,16 +33,6 @@ public class JpaMealRepository implements MealRepository {
         } else {
             return em.merge(meal);
         }
-// не валидируются проверки Entity, поэтому придется добавлять еще один запрос ?
-//            return em.createQuery("UPDATE Meal " +
-//                            "SET dateTime=:dateTime , description=:description, calories=:calories" +
-//                            " WHERE id=:id AND user.id=:userId")
-//                    .setParameter("dateTime", meal.getDateTime())
-//                    .setParameter("description", meal.getDescription())
-//                    .setParameter("calories", meal.getCalories())
-//                    .setParameter("id", meal.getId())
-//                    .setParameter("userId", userId)
-//                    .executeUpdate() == 0 ? null : meal;
     }
 
     @Transactional
