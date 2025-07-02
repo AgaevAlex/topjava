@@ -3,8 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -40,25 +39,16 @@ public class MealServiceTest {
     private static final StringBuilder note = new StringBuilder();
 
     @Rule
-    public final TestRule watchman = new TestWatcher() {
-
-        private long startTime;
+    public final Stopwatch stopwatch = new Stopwatch() {
 
         @Override
-        protected void starting(Description description) {
-            startTime = System.nanoTime();
-            log.info("Starting test: {}", description.getMethodName());
-        }
-
-        @Override
-        protected void finished(Description description) {
-            long duration = System.nanoTime() - startTime;
-
-            String result = String.format("%-35s %7d ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(duration));
+        protected void finished(long nanos, Description description) {
+            String result = String.format("%-35s %7d ms", description.getMethodName(), TimeUnit.NANOSECONDS.toMillis(nanos));
             note.append("\n").append(result);
             log.info("{}", result);
         }
     };
+
 
     @AfterClass
     public static void printNote() {
