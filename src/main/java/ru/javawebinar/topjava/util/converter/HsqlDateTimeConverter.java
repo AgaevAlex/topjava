@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+import static ru.javawebinar.topjava.Profiles.HSQL_DB;
+
 @Component
-@Profile("hsqldb")
-public class HsqlDateTimeConverterImpl implements DateTimeConverter<Timestamp> {
+@Profile(HSQL_DB)
+public class HsqlDateTimeConverter implements DateTimeConverter<Timestamp> {
 
     @Override
     public Timestamp convertDateTime(LocalDateTime localDateTime) {

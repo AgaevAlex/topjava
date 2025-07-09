@@ -69,10 +69,6 @@ public class User extends AbstractNamedEntity {
         this(id, name, email, password, DEFAULT_CALORIES_PER_DAY, true, new Date(), List.of(roles));
     }
 
-    public User(Integer id) {
-        this(id, null, null, null, null, null, null, null);
-    }
-
     public User(Integer id, String name, String email, String password, int caloriesPerDay, boolean enabled, Date registered, Collection<Role> roles) {
         super(id, name);
         this.email = email;
