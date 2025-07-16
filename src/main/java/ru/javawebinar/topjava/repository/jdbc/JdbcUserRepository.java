@@ -1,9 +1,10 @@
 package ru.javawebinar.topjava.repository.jdbc;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -12,23 +13,18 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
-import ru.javawebinar.topjava.util.ListUserExtractor;
-import ru.javawebinar.topjava.util.UserExtractor;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Repository
 @Transactional(readOnly = true)
 public class JdbcUserRepository implements UserRepository {
-
-    private static final BeanPropertyRowMapper<User> ROW_MAPPER = BeanPropertyRowMapper.newInstance(User.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -71,6 +67,17 @@ public class JdbcUserRepository implements UserRepository {
         return user;
     }
 
+    private void validate(User user) {
+        Set<ConstraintViolation<User>> violations = validator.validate(user);
+        if (!violations.isEmpty()) {
+            throw new ConstraintViolationException(violations);
+        }
+    }
+
+    private void deleteRoles(User u) {
+        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", u.getId());
+    }
+
     @Override
     @Transactional
     public boolean delete(int id) {
@@ -79,17 +86,19 @@ public class JdbcUserRepository implements UserRepository {
 
     @Override
     public User get(int id) {
-        return jdbcTemplate.query(
+        List<User> query = jdbcTemplate.query(
                 "SELECT * FROM users u LEFT JOIN user_role ur ON u.id = ur.user_id " +
-                        "WHERE id=?", new UserExtractor(), id);
+                        "WHERE id=?", new ListUserExtractor(), id);
+        return DataAccessUtils.singleResult(query);
     }
 
     @Override
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        return jdbcTemplate.query(
+        List<User> query = jdbcTemplate.query(
                 "SELECT * FROM users u LEFT JOIN user_role ur ON u.id = ur.user_id WHERE email=?",
-                new UserExtractor(), email);
+                new ListUserExtractor(), email);
+        return DataAccessUtils.singleResult(query);
     }
 
     @Override
@@ -117,15 +126,36 @@ public class JdbcUserRepository implements UserRepository {
                 }
         );
     }
+}
 
-    private void deleteRoles(User u) {
-        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", u.getId());
-    }
+class ListUserExtractor implements ResultSetExtractor<List<User>> {
+    @Override
+    public List<User> extractData(ResultSet rs) throws SQLException {
+        Map<Integer, User> userMap = new LinkedHashMap<>();
 
-    private void validate(User user) {
-        Set<ConstraintViolation<User>> violations = validator.validate(user);
-        if (!violations.isEmpty()) {
-            throw new ConstraintViolationException(violations);
+        while (rs.next()) {
+            int userId = rs.getInt("id");
+            User user = userMap.get(userId);
+
+            if (user == null) {
+                user = new User();
+                user.setId(userId);
+                user.setName(rs.getString("name"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setEnabled(rs.getBoolean("enabled"));
+                user.setCaloriesPerDay(rs.getInt("calories_per_day"));
+                user.setRegistered(rs.getTimestamp("registered"));
+                user.setRoles(new HashSet<>());
+                userMap.put(userId, user);
+            }
+
+            String roleStr = rs.getString("role");
+            if (roleStr != null) {
+                user.getRoles().add(Role.valueOf(roleStr));
+            }
         }
+
+        return new ArrayList<>(userMap.values());
     }
 }

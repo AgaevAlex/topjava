@@ -33,14 +33,14 @@ public class JspMealController extends AbstractMealController {
     }
 
     @GetMapping()
-    public String getMeals(Model model) {
+    public String get(Model model) {
         log.info("get users");
         model.addAttribute("meals", getAll());
         return "meals";
     }
 
     @PostMapping
-    public String saveMeal(HttpServletRequest request) throws UnsupportedEncodingException {
+    public String save(HttpServletRequest request) throws UnsupportedEncodingException {
         request.setCharacterEncoding("UTF-8");
         log.info("save meal");
         Meal meal = new Meal(
@@ -57,14 +57,14 @@ public class JspMealController extends AbstractMealController {
     }
 
     @GetMapping("/update")
-    public String updateMeal(Model model, @RequestParam("id") int id) {
+    public String update(Model model, @RequestParam("id") int id) {
         log.info("update meal form");
         model.addAttribute("meal", get(id));
         return "mealForm";
     }
 
     @GetMapping("/create")
-    public String crateMeal(Model model) {
+    public String create(Model model) {
         log.info("create meal form");
         Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
         model.addAttribute("meal", meal);
@@ -72,15 +72,14 @@ public class JspMealController extends AbstractMealController {
     }
 
     @GetMapping("/delete")
-    public String deleteMeal(@RequestParam int id) {
-        log.info("delete meal");
-        delete(id);
+    public String delete(HttpServletRequest request) {
+        super.delete(getId(request));
         return "redirect:/meals";
     }
 
 
     @GetMapping("/filter")
-    public String filterMeal(Model model, HttpServletRequest request) {
+    public String filter(Model model, HttpServletRequest request) {
         log.info("filter meals");
         LocalDate startDate = parseLocalDate(request.getParameter("startDate"));
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
