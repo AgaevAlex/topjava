@@ -27,8 +27,4 @@ public class Profiles {
             throw new IllegalStateException("Could not find DB driver");
         }
     }
-
-    public static boolean isActive(Environment env, String profile) {
-        return Arrays.asList(env.getActiveProfiles()).contains(profile);
-    }
 }
