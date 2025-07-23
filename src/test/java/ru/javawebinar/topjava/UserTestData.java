@@ -5,6 +5,8 @@ import ru.javawebinar.topjava.model.User;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.EnumSet;
+import java.util.Set;
 
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 
@@ -21,7 +23,15 @@ public class UserTestData {
     public static final User guest = new User(GUEST_ID, "Guest", "guest@gmail.com", "guest");
 
     public static User getNew() {
-        return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), Collections.singleton(Role.USER));
+        return createUserWithRoles(EnumSet.of(Role.USER, Role.ADMIN));
+    }
+
+    public static User getNewWithoutRoles() {
+        return createUserWithRoles(null);
+    }
+
+    private static User createUserWithRoles(Set<Role> roles) {
+        return new User(null, "New", "new@gmail.com", "newPass", 1555, false, new Date(), roles);
     }
 
     public static User getUpdated() {

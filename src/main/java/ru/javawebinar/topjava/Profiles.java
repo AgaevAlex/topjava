@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava;
 
-import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
-
-import java.util.Arrays;
 
 public class Profiles {
     public static final String
