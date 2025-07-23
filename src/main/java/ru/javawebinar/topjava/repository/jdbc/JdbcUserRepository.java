@@ -11,13 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
+import ru.javawebinar.topjava.util.ValidationUtil;
 
-import javax.validation.Validator;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
-
-import static ru.javawebinar.topjava.util.ValidationUtil.validate;
 
 @Repository
 @Transactional(readOnly = true)
@@ -31,9 +29,7 @@ public class JdbcUserRepository implements UserRepository {
 
     private final SimpleJdbcInsert insertUser;
 
-    private final Validator validator;
-
-    private static final ResultSetExtractor<List<User>> listUserExtractor = rs -> {
+    private static final ResultSetExtractor<List<User>> LIST_USER_EXTRACTOR = rs -> {
         Map<Integer, User> userMap = new LinkedHashMap<>();
 
         while (rs.next()) {
@@ -55,20 +51,18 @@ public class JdbcUserRepository implements UserRepository {
     };
 
     @Autowired
-    public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, Validator validator) {
+    public JdbcUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
         this.insertUser = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("users")
                 .usingGeneratedKeyColumns("id");
-
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.validator = validator;
     }
 
     @Override
     @Transactional
     public User save(User user) {
-        validate(user, validator);
+        ValidationUtil.validate(user);
         BeanPropertySqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
 
         if (user.isNew()) {
@@ -124,23 +118,23 @@ public class JdbcUserRepository implements UserRepository {
     public User get(int id) {
         List<User> users = jdbcTemplate.query(
                 "SELECT * FROM users u LEFT JOIN user_role ur ON u.id = ur.user_id " +
-                        "WHERE id=?", listUserExtractor, id);
+                        "WHERE id=?", LIST_USER_EXTRACTOR, id);
         return DataAccessUtils.singleResult(users);
     }
 
     @Override
     public User getByEmail(String email) {
 //        return jdbcTemplate.queryForObject("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
-        List<User> query = jdbcTemplate.query(
+        List<User> users = jdbcTemplate.query(
                 "SELECT * FROM users u LEFT JOIN user_role ur ON u.id = ur.user_id WHERE email=?",
-                listUserExtractor, email);
-        return DataAccessUtils.singleResult(query);
+                LIST_USER_EXTRACTOR, email);
+        return DataAccessUtils.singleResult(users);
     }
 
     @Override
     public List<User> getAll() {
         List<User> users = jdbcTemplate.query("SELECT * FROM users u " +
-                "LEFT JOIN user_role ur ON u.id = ur.user_id ORDER BY name, email", listUserExtractor);
+                "LEFT JOIN user_role ur ON u.id = ur.user_id ORDER BY name, email", LIST_USER_EXTRACTOR);
         return users;
     }
 }
