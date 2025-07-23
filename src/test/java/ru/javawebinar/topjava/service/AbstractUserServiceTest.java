@@ -1,15 +1,13 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
-import ru.javawebinar.topjava.repository.JpaUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 
 import javax.validation.ConstraintViolationException;
@@ -18,29 +16,13 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.Assert.assertThrows;
-import static ru.javawebinar.topjava.Profiles.DATAJPA;
-import static ru.javawebinar.topjava.Profiles.JPA;
 import static ru.javawebinar.topjava.UserTestData.*;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected UserService service;
-
-    @Autowired
-    private CacheManager cacheManager;
-
-    @Lazy
-    @Autowired
-    protected JpaUtil jpaUtil;
-
-    @Before
-    public void setup() {
-        cacheManager.getCache("users").clear();
-        if (env.matchesProfiles(JPA, DATAJPA)) {
-            jpaUtil.clear2ndLevelHibernateCache();
-        }
-    }
 
     @Test
     public void create() {
@@ -100,7 +82,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     public void update() {
         User updated = getUpdated();
         service.update(updated);
-        USER_MATCHER.assertMatch(service.get(ADMIN_ID), getUpdated());
+        USER_MATCHER.assertMatch(service.getAll().get(1), getUpdated());
     }
 
     @Test
