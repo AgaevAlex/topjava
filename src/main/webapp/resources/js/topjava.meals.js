@@ -12,7 +12,7 @@ function filter() {
         url: ctx.ajaxUrl + "filter",
         data: formData,
         success: function (data) {
-            ctx.datatableApi.clear().rows.add(data).draw();
+            updateTableByData(data);
         },
         error: function (jqXHR) {
             failNoty(jqXHR);
@@ -21,7 +21,7 @@ function filter() {
 }
 
 function filterReset() {
-    $("#filter").find(":input").val("");
+    document.getElementById("filter").reset();
     updateTable();
 }
 

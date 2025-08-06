@@ -31,10 +31,11 @@ public class MealUIController extends AbstractMealController {
     }
 
     @PostMapping
-    public void сreate(@Nullable @RequestParam("id") Integer id,
-                       @RequestParam("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
-                       @RequestParam("description") String description,
-                       @RequestParam("calories") int calories) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void createOrUpdate(@Nullable @RequestParam("id") Integer id,
+                               @RequestParam("dateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+                               @RequestParam("description") String description,
+                               @RequestParam("calories") int calories) {
         Meal meal = new Meal(id, dateTime, description, calories);
 
         if (meal.isNew()) {
@@ -44,7 +45,8 @@ public class MealUIController extends AbstractMealController {
         }
     }
 
-    @GetMapping( "/filter")
+    @Override
+    @GetMapping("/filter")
     public List<MealTo> getBetween(
             @RequestParam(value = "startDate", required = false) LocalDate startDate,
             @RequestParam(value = "startTime", required = false) LocalTime startTime,

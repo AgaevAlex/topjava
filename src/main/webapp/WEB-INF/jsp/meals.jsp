@@ -60,7 +60,7 @@
             <span class="fa fa-plus"></span>
             <spring:message code="common.add"/>
         </button>
-        <table border="1" cellpadding="8" cellspacing="0" id="datatable">
+        <table class="table table-striped" id="datatable">
             <thead>
             <tr>
                 <th><spring:message code="meal.dateTime"/></th>
