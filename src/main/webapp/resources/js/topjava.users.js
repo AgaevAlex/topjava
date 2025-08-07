@@ -23,6 +23,12 @@ function enable(checkbox, id) {
     });
 }
 
+function updateTable() {
+    $.get(ctx.ajaxUrl, function (data) {
+        updateTableByData(data);
+    });
+}
+
 // $(document).ready(function () {
 $(function () {
     makeEditable(

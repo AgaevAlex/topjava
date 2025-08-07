@@ -20,6 +20,10 @@ function filter() {
     });
 }
 
+function updateTable() {
+    filter();
+}
+
 function filterReset() {
     document.getElementById("filter").reset();
     updateTable();
